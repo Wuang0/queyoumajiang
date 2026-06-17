@@ -31,10 +31,11 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
     "allowJs": false,
     "checkJs": false,
     "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@queyou/protocol": ["../protocol/src/index"]
     }
