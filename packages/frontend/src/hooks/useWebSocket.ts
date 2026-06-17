@@ -2,12 +2,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from '../store/auth.store';
 
-const WS_URL =
-  (typeof window !== 'undefined'
-    ? (window as unknown as { __WS_URL__?: string }).__WS_URL__
-    : undefined) ??
-  process.env.TARO_APP_WS_URL ??
-  'http://localhost:3000';
+const WS_URL = 'https://queyoumajiang-backend.onrender.com';
 
 let clientSeq = 0;
 const HEARTBEAT_INTERVAL = 5000;

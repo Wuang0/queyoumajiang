@@ -1,12 +1,6 @@
 import { useAuthStore } from '../store/auth.store';
 
-// H5 部署后改为实际 Render 后端地址
-const BASE_URL =
-  (typeof window !== 'undefined'
-    ? (window as unknown as { __API_URL__?: string }).__API_URL__
-    : undefined) ??
-  process.env.TARO_APP_API_URL ??
-  'http://localhost:3000';
+const BASE_URL = 'https://queyoumajiang-backend.onrender.com';
 
 interface ApiResponse<T> {
   code: number;
