@@ -6,7 +6,7 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm@9
-      pnpm install --no-frozen-lockfile
+      NODE_ENV=development pnpm install --no-frozen-lockfile
       pnpm --filter @queyou/protocol build
       cd packages/backend && npx prisma@5.8 generate && cd ../..
       cd packages/backend && npx -y @nestjs/cli build && cd ../..
