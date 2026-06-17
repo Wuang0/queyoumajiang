@@ -8,8 +8,8 @@ services:
       npm install -g pnpm@9
       pnpm install --no-frozen-lockfile
       pnpm --filter @queyou/protocol build
-      cd packages/backend && npx prisma@5.8 generate && cd ../..
-      pnpm --filter @queyou/backend build
+      cd packages/backend && pnpm exec prisma generate && cd ../..
+      cd packages/backend && pnpm exec nest build && cd ../..
     startCommand: node packages/backend/dist/main.js
     envVars:
       - key: NODE_ENV

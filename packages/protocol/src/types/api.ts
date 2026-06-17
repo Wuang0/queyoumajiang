@@ -4,7 +4,6 @@
 
 import type {
   UserBrief,
-  UserPublic,
   FriendBrief,
   RoomStatus,
   MatchPlayerResult,

@@ -7,8 +7,8 @@ import type {
   WinType,
   VoiceMode,
   RuleType,
-  FanBreakdown,
 } from './common';
+import type { FanBreakdown } from './game';
 
 // ==================== 消息信封 ====================
 
