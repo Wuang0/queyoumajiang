@@ -22,7 +22,6 @@ async function bootstrap(): Promise<void> {
   app.enableCors({
     origin: process.env.CORS_ORIGIN ?? '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
   });
 
   const port = process.env.PORT ?? 3000;
