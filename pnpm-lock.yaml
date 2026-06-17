@@ -236,6 +236,12 @@ importers:
       '@babel/core':
         specifier: ^7.24.0
         version: 7.29.7
+      '@babel/plugin-transform-class-properties':
+        specifier: ^7.24.0
+        version: 7.29.7(@babel/core@7.29.7)
+      '@babel/plugin-transform-private-methods':
+        specifier: ^7.24.0
+        version: 7.29.7(@babel/core@7.29.7)
       '@babel/preset-react':
         specifier: ^7.24.0
         version: 7.29.7(@babel/core@7.29.7)
