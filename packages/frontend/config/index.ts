@@ -69,10 +69,6 @@ const config = {
       port: 10086,
       host: '0.0.0.0',
     },
-    webpackChain(chain) {
-      // 转译所有 node_modules 避免私有字段 #field 语法错误
-      chain.module.rule('script').exclude.clear();
-    },
   },
 };
 

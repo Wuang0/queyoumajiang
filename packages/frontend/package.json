@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
+    "@babel/plugin-transform-class-properties": "^7.24.0",
+    "@babel/plugin-transform-private-methods": "^7.24.0",
     "@babel/preset-react": "^7.24.0",
     "@tarojs/cli": "^4.0.0",
     "@tarojs/plugin-platform-h5": "^4.0.0",
