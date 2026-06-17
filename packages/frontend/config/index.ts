@@ -69,6 +69,9 @@ const config = {
       port: 10086,
       host: '0.0.0.0',
     },
+    webpackChain(chain) {
+      chain.optimization.minimize(false);
+    },
   },
 };
 
