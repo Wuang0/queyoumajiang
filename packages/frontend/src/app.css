@@ -1,0 +1,21 @@
+/* 雀友麻将 · 设计 Token */
+page {
+  --brand-jade: #2B7A3D;
+  --brand-jade-soft: #5BA56A;
+  --ink-deep: #1F2933;
+  --ink-soft: #52606D;
+  --ink-mute: #9AA5B1;
+  --cream: #F4EFE6;
+  --cream-deep: #E8DFCE;
+  --cinnabar: #C4382E;
+  --warning: #D9883B;
+  --shadow-1: 0 4px 12px rgba(31,41,51,0.06);
+  --shadow-2: 0 12px 32px rgba(31,41,51,0.10);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-color: var(--cream);
+  color: var(--ink-deep);
+  font-size: 28px;
+}

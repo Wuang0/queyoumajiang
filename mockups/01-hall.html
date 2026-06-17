@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 大厅 (横屏)</title>
+<style>
+  /* ================= Design Tokens (现代东方茶馆) =================
+     这些值都从 §10 设计规范来的，所有页面共享 */
+  :root{
+    --brand-jade:#2B7A3D;
+    --brand-jade-soft:#5BA56A;
+    --brand-jade-deep:#1F5A2D;
+    --ink-deep:#1F2933;
+    --ink-soft:#52606D;
+    --ink-mute:#9AA5B1;
+    --cream:#F4EFE6;
+    --cream-deep:#E8DFCE;
+    --cream-darker:#D8CFB8;
+    --cinnabar:#C4382E;
+    --warning:#D9883B;
+    --gold-faint:#B8975B;
+    --mask:rgba(31,41,51,.55);
+    --shadow-1:0 4px 12px rgba(31,41,51,.06);
+    --shadow-2:0 12px 32px rgba(31,41,51,.10);
+    --shadow-3:0 24px 64px rgba(31,41,51,.14);
+    --radius-sm:8px; --radius-md:14px; --radius-lg:20px; --radius-pill:999px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--ink-deep);}
+
+  /* 横屏小程序基准画布: 812 x 375 (iPhone 横屏) */
+  body{
+    background:#1a1a1a;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px;
+  }
+  .device{
+    width:812px;height:375px;
+    background:var(--cream);
+    border-radius:32px;
+    overflow:hidden;
+    box-shadow:0 40px 120px rgba(0,0,0,.45),0 0 0 8px #111,0 0 0 9px #2a2a2a;
+    position:relative;
+    /* 米麻纹理：极淡的纤维斜线 */
+    background-image:
+      repeating-linear-gradient(135deg, rgba(184,151,91,.04) 0 1px, transparent 1px 8px),
+      repeating-linear-gradient(45deg, rgba(184,151,91,.03) 0 1px, transparent 1px 11px);
+  }
+
+  /* iPhone 横屏的圆角 + Dynamic Island 在左侧 */
+  .device::before{
+    content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:30px;height:108px;background:#0a0a0a;border-radius:18px;z-index:50;
+  }
+
+  /* ================= Header ================= */
+  .header{
+    height:52px;padding:0 24px 0 60px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(31,41,51,.06);
+    position:relative;z-index:10;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(160deg,var(--brand-jade) 0%, var(--brand-jade-deep) 100%);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:18px;font-weight:600;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18), var(--shadow-1);
+    /* 把"雀"字做成 logo */
+    font-family:"STKaiti","KaiTi",serif;
+  }
+  .brand-name{font-size:15px;font-weight:600;letter-spacing:.04em;}
+  .brand-sub{font-size:11px;color:var(--ink-mute);margin-left:4px;letter-spacing:.08em;}
+
+  .user-mini{display:flex;align-items:center;gap:10px;cursor:pointer;}
+  .avatar{
+    width:32px;height:32px;border-radius:50%;
+    background:linear-gradient(135deg,#E8DFCE,#D8CFB8);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:var(--ink-soft);font-weight:600;
+    border:1.5px solid #fff;box-shadow:var(--shadow-1);
+    position:relative;
+  }
+  /* 段位徽章右下角 */
+  .avatar::after{
+    content:"叁";font-family:"STKaiti","KaiTi",serif;
+    position:absolute;right:-4px;bottom:-4px;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--cinnabar);color:#fff;
+    font-size:10px;display:flex;align-items:center;justify-content:center;
+    border:1.5px solid var(--cream);
+  }
+  .user-meta{font-size:12px;line-height:1.3;}
+  .user-meta .name{font-weight:600;color:var(--ink-deep);}
+  .user-meta .rank{color:var(--ink-mute);font-size:10px;letter-spacing:.04em;}
+
+  /* ================= Main hero stage ================= */
+  .stage{
+    height:calc(100% - 52px - 44px); /* header + tabbar */
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 24px;
+  }
+
+  /* 大牌桌 hero —— 圆形桌面 + 4 张散落的牌 */
+  .table-hero{
+    position:relative;
+    width:560px;height:240px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  /* 桌面投影：椭圆毛玻璃感 */
+  .table-disc{
+    position:absolute;left:50%;top:60%;transform:translate(-50%,-50%);
+    width:520px;height:220px;border-radius:50%;
+    background:radial-gradient(ellipse at center,
+      rgba(43,122,61,.10) 0%,
+      rgba(43,122,61,.06) 35%,
+      rgba(43,122,61,0) 70%);
+    filter:blur(2px);
+  }
+  /* 桌面边圈：极细的金色环（弱化） */
+  .table-ring{
+    position:absolute;left:50%;top:60%;transform:translate(-50%,-50%);
+    width:380px;height:160px;border-radius:50%;
+    border:1.5px solid rgba(184,151,91,.22);
+    box-shadow:inset 0 0 32px rgba(43,122,61,.04);
+  }
+
+  /* 4 张散落的牌（装饰，不可点）——朱黑双色，不用金边 */
+  .deco-tile{
+    position:absolute;
+    width:54px;height:74px;
+    background:linear-gradient(170deg,#FBF7EE 0%, #EDE3CD 100%);
+    border-radius:7px;
+    box-shadow:
+      0 2px 0 rgba(216,207,184,.9),
+      0 6px 14px rgba(31,41,51,.10),
+      inset 0 0 0 1px rgba(184,151,91,.18);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:30px;color:var(--ink-deep);
+    user-select:none;
+  }
+  .deco-tile.cinnabar{color:var(--cinnabar);}
+  .deco-tile.t1{ left:90px; top:30px;  transform:rotate(-14deg);}
+  .deco-tile.t2{ left:180px; top:140px; transform:rotate(8deg);}
+  .deco-tile.t3{ right:170px; top:30px;  transform:rotate(-6deg);}
+  .deco-tile.t4{ right:80px;  top:135px; transform:rotate(16deg);}
+
+  /* 中央双 CTA */
+  .cta-pair{
+    position:relative;z-index:5;
+    display:flex;gap:14px;
+    background:rgba(255,255,255,.5);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    padding:18px;border-radius:22px;
+    box-shadow:var(--shadow-3),inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .cta{
+    cursor:pointer;
+    display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+    width:170px;height:88px;
+    padding:14px 18px;border-radius:14px;
+    transition:transform .12s ease, box-shadow .12s ease;
+    position:relative;overflow:hidden;
+  }
+  .cta:hover{transform:translateY(-1px);}
+  .cta:active{transform:translateY(1px);}
+  .cta-primary{
+    background:linear-gradient(165deg,var(--brand-jade-soft) 0%, var(--brand-jade) 60%, var(--brand-jade-deep) 100%);
+    color:#fff;
+    box-shadow:0 6px 16px rgba(43,122,61,.30), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .cta-secondary{
+    background:#fff;
+    color:var(--ink-deep);
+    border:1px solid rgba(31,41,51,.08);
+    box-shadow:var(--shadow-1);
+  }
+  .cta-icon{
+    font-size:18px;line-height:1;margin-bottom:8px;
+    font-family:"STKaiti","KaiTi",serif;letter-spacing:0;
+  }
+  .cta-primary .cta-icon{opacity:.9;}
+  .cta-title{font-size:16px;font-weight:600;letter-spacing:.02em;}
+  .cta-sub{font-size:11px;margin-top:3px;opacity:.7;letter-spacing:.04em;}
+  .cta-primary .cta-sub{opacity:.8;}
+
+  /* ================= Recent matches strip ================= */
+  .recent-strip{
+    position:absolute;left:0;right:0;bottom:0;
+    height:44px;
+    display:flex;align-items:center;
+    padding:0 24px;
+    gap:16px;
+    border-top:1px solid rgba(31,41,51,.06);
+    background:rgba(244,239,230,.6);
+  }
+  .recent-label{font-size:11px;color:var(--ink-mute);letter-spacing:.08em;flex-shrink:0;}
+  .recent-list{display:flex;gap:14px;flex:1;overflow:hidden;}
+  .recent-item{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;color:var(--ink-soft);
+    padding-right:14px;border-right:1px solid rgba(31,41,51,.08);
+  }
+  .recent-item:last-child{border-right:0;}
+  .recent-score{font-family:"SF Mono",monospace;font-weight:600;letter-spacing:.04em;}
+  .recent-score.win{color:var(--brand-jade);}
+  .recent-score.lose{color:var(--cinnabar);}
+  .recent-vs{color:var(--ink-mute);font-size:11px;}
+  .recent-time{color:var(--ink-mute);font-size:11px;}
+  .recent-more{font-size:11px;color:var(--ink-mute);margin-left:auto;cursor:pointer;flex-shrink:0;}
+  .recent-more:hover{color:var(--brand-jade);}
+
+  /* ================= TabBar (横屏左侧) ================= */
+  .tabbar{
+    position:absolute;left:0;top:0;bottom:0;
+    width:60px;
+    background:transparent;
+    z-index:5;
+    /* 留出 Dynamic Island 的空间 */
+  }
+
+  /* 注释和坐标提示（开发用，最终可移除） */
+  .meta-note{
+    position:absolute;top:-32px;left:0;
+    font-family:"SF Mono",monospace;font-size:10px;color:rgba(255,255,255,.5);
+    letter-spacing:.05em;
+  }
+  .skill-watermark{
+    position:absolute;bottom:8px;right:14px;
+    font-size:9px;color:rgba(31,41,51,.18);
+    font-family:"SF Mono",monospace;letter-spacing:.18em;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+  <div class="device">
+    <span class="meta-note">812 × 375 · iPhone landscape · 大厅 (大牌桌式)</span>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <div class="brand-mark">雀</div>
+        <span class="brand-name">雀友麻将</span>
+        <span class="brand-sub">QUEYOU</span>
+      </div>
+      <div class="user-mini">
+        <div>
+          <div class="user-meta">
+            <span class="name">王哥</span>
+          </div>
+          <div class="user-meta">
+            <span class="rank">雀友 · 三段 · +218</span>
+          </div>
+        </div>
+        <div class="avatar">王</div>
+      </div>
+    </div>
+
+    <!-- Hero stage -->
+    <div class="stage">
+      <div class="table-hero">
+        <!-- 桌面装饰 -->
+        <div class="table-disc"></div>
+        <div class="table-ring"></div>
+
+        <!-- 4 张装饰牌 散落在桌面四角 -->
+        <div class="deco-tile t1 cinnabar">中</div>
+        <div class="deco-tile t2">發</div>
+        <div class="deco-tile t3">東</div>
+        <div class="deco-tile t4 cinnabar">五</div>
+
+        <!-- 中央双 CTA -->
+        <div class="cta-pair">
+          <div class="cta cta-primary">
+            <span class="cta-icon">＋ 创建</span>
+            <span class="cta-title">开一桌</span>
+            <span class="cta-sub">襄阳红中癞子 · 8 局</span>
+          </div>
+          <div class="cta cta-secondary">
+            <span class="cta-icon" style="color:var(--ink-soft);"># 房号</span>
+            <span class="cta-title">加入房间</span>
+            <span class="cta-sub">输入 6 位数字 / 卡片直达</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 最近对局 横向条 -->
+    <div class="recent-strip">
+      <span class="recent-label">最 近 对 局</span>
+      <div class="recent-list">
+        <div class="recent-item">
+          <span class="recent-score win">+25</span>
+          <span class="recent-vs">vs 王李张</span>
+          <span class="recent-time">6.13</span>
+        </div>
+        <div class="recent-item">
+          <span class="recent-score lose">−12</span>
+          <span class="recent-vs">vs 王张李</span>
+          <span class="recent-time">6.11</span>
+        </div>
+        <div class="recent-item">
+          <span class="recent-score win">+8</span>
+          <span class="recent-vs">vs 王李陈</span>
+          <span class="recent-time">6.08</span>
+        </div>
+        <div class="recent-item">
+          <span class="recent-score win">+44</span>
+          <span class="recent-vs">vs 张李陈</span>
+          <span class="recent-time">6.05</span>
+        </div>
+      </div>
+      <span class="recent-more">查看战绩 →</span>
+    </div>
+
+    <span class="skill-watermark">QUEYOU · v0.2 mockup</span>
+  </div>
+</body>
+</html>

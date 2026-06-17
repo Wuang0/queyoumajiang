@@ -1,0 +1,161 @@
+.stats-page {
+  min-height: 100vh;
+  background: var(--cream);
+  padding: 24px;
+  padding-top: 88px;
+}
+
+.stats-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 28px;
+  color: var(--ink-mute);
+}
+
+/* 段位卡 */
+.stats-rank-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: var(--shadow-1);
+}
+
+.stats-rank-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--brand-jade-soft), var(--brand-jade));
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(43,122,61,0.25);
+}
+
+.stats-rank-info {
+  flex: 1;
+}
+
+.stats-rank-name {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.stats-rank-score {
+  font-size: 24px;
+  color: var(--brand-jade);
+  margin-top: 4px;
+}
+
+.stats-rank-bar {
+  height: 6px;
+  background: rgba(31,41,51,0.08);
+  border-radius: 999px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.stats-rank-bar-fill {
+  height: 100%;
+  background: var(--brand-jade);
+  border-radius: 999px;
+}
+
+.stats-rank-bar-label {
+  font-size: 20px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+}
+
+/* 数据行 */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.stats-cell {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: var(--shadow-1);
+}
+
+.stats-cell-val {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink-deep);
+}
+
+.stats-cell-val.win {
+  color: var(--brand-jade);
+}
+
+.stats-cell-label {
+  font-size: 22px;
+  color: var(--ink-mute);
+  margin-top: 4px;
+}
+
+/* 最近对局 */
+.stats-recent {
+  margin-top: 24px;
+}
+
+.stats-section-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.stats-match-row {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-1);
+}
+
+.stats-match-row + .stats-match-row {
+  margin-top: 12px;
+}
+
+.stats-match-score {
+  font-size: 36px;
+  font-weight: 700;
+  font-family: monospace;
+  min-width: 80px;
+}
+
+.stats-match-info {
+  flex: 1;
+}
+
+.stats-match-rule {
+  font-size: 24px;
+  color: var(--ink-deep);
+}
+
+.stats-match-time {
+  font-size: 20px;
+  color: var(--ink-mute);
+  margin-top: 4px;
+}
+
+.stats-empty {
+  text-align: center;
+  font-size: 24px;
+  color: var(--ink-mute);
+  padding: 40px;
+}

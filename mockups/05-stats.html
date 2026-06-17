@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 战绩</title>
+<link rel="stylesheet" href="_tokens.css">
+<style>
+  .header{
+    height:48px;padding:0 24px 0 60px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(31,41,51,.06);
+    position:relative;z-index:10;
+  }
+  .back-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);cursor:pointer;font-size:18px;}
+  .title{font-size:14px;font-weight:600;letter-spacing:.18em;color:var(--ink-deep);}
+  .header-tabs{display:flex;gap:14px;}
+  .h-tab{font-size:11px;color:var(--ink-mute);letter-spacing:.08em;padding:4px 10px;border-radius:var(--r-pill);cursor:pointer;}
+  .h-tab.active{background:rgba(43,122,61,.10);color:var(--brand-jade);}
+
+  .main{
+    height:calc(100% - 48px);
+    display:grid;grid-template-columns:240px 1fr;
+    padding:14px 28px 14px 76px;gap:18px;
+  }
+
+  /* 左：段位卡 */
+  .rank-card{
+    background:linear-gradient(165deg, var(--cream-paper) 0%, var(--cream-deep) 100%);
+    border-radius:var(--r-lg);
+    padding:16px;
+    box-shadow:var(--shadow-2);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .rank-card::before{
+    content:"段";
+    position:absolute;right:-10px;bottom:-20px;
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:140px;color:rgba(43,122,61,.06);
+    line-height:1;font-weight:600;
+  }
+  .rank-badge{
+    width:64px;height:64px;border-radius:50%;
+    background:linear-gradient(160deg,var(--brand-jade-soft) 0%, var(--brand-jade-deep) 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"STKaiti","KaiTi",serif;
+    color:#fff;font-size:24px;font-weight:600;
+    box-shadow:0 0 0 4px rgba(43,122,61,.15), 0 6px 14px rgba(43,122,61,.30);
+    position:relative;
+    margin-bottom:8px;
+  }
+  .rank-name{font-size:14px;font-weight:600;letter-spacing:.18em;color:var(--ink-deep);position:relative;}
+  .rank-tier{font-size:11px;color:var(--ink-mute);letter-spacing:.04em;margin-top:2px;position:relative;}
+
+  .rank-progress{margin-top:14px;position:relative;}
+  .rank-score{
+    font-family:"SF Mono",monospace;
+    font-size:24px;font-weight:600;color:var(--brand-jade);
+    letter-spacing:.04em;
+  }
+  .rank-score-label{font-size:10px;color:var(--ink-mute);letter-spacing:.08em;margin-top:1px;}
+  .progress-bar{
+    margin-top:8px;
+    height:4px;background:rgba(31,41,51,.08);
+    border-radius:var(--r-pill);overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:44%;
+    background:linear-gradient(90deg,var(--brand-jade-soft),var(--brand-jade));
+    border-radius:var(--r-pill);
+  }
+  .progress-text{font-size:10px;color:var(--ink-mute);margin-top:4px;letter-spacing:.04em;}
+
+  /* 右：图 + 数据 + 历史 */
+  .right-pane{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
+
+  .chart-card{
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(31,41,51,.06);
+    border-radius:var(--r-md);
+    padding:10px 14px 8px;
+  }
+  .pane-title{font-size:11px;color:var(--ink-mute);letter-spacing:.18em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
+  .chart-svg{width:100%;height:64px;display:block;}
+
+  .stats-strip{
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(31,41,51,.06);
+    border-radius:var(--r-md);
+    padding:8px 14px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .stats-strip .stat{display:flex;flex-direction:column;align-items:flex-start;gap:1px;}
+  .stats-strip .v{font-family:"SF Mono",monospace;font-size:14px;font-weight:600;color:var(--ink-deep);}
+  .stats-strip .l{font-size:10px;color:var(--ink-mute);letter-spacing:.04em;}
+
+  .history{
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(31,41,51,.06);
+    border-radius:var(--r-md);
+    padding:8px;
+    flex:1;
+    overflow:hidden;
+  }
+  .history-row{
+    display:flex;align-items:center;gap:12px;
+    padding:7px 8px;border-radius:var(--r-sm);
+    font-size:12px;
+  }
+  .history-row + .history-row{border-top:1px dashed rgba(31,41,51,.06);}
+  .h-date{color:var(--ink-mute);font-family:"SF Mono",monospace;width:78px;font-size:11px;}
+  .h-score{font-family:"SF Mono",monospace;font-weight:600;width:38px;text-align:right;}
+  .h-score.win{color:var(--brand-jade);}
+  .h-score.lose{color:var(--cinnabar);}
+  .h-vs{flex:1;color:var(--ink-soft);font-size:11px;}
+  .h-rule{color:var(--ink-mute);font-size:10px;letter-spacing:.04em;}
+  .h-rank-delta{font-size:10px;font-family:"SF Mono",monospace;width:50px;text-align:right;}
+  .h-rank-delta.up{color:var(--brand-jade);}
+</style>
+</head>
+<body>
+<div class="device">
+  <span class="meta-note">812 × 375 · 战绩页</span>
+
+  <div class="header">
+    <div class="back-btn">‹</div>
+    <div class="title">战 绩</div>
+    <div class="header-tabs">
+      <span class="h-tab active">本 周</span>
+      <span class="h-tab">本 月</span>
+      <span class="h-tab">全 部</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- 左：段位卡 -->
+    <div class="rank-card">
+      <div class="rank-badge">叁</div>
+      <div class="rank-name">雀友 · 三段</div>
+      <div class="rank-tier">QUEYOU · LEVEL 3</div>
+
+      <div class="rank-progress">
+        <div class="rank-score">+218</div>
+        <div class="rank-score-label">累 计 净 胜 分</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text">距 离 麻雀师·四段 还 差 +282 分</div>
+      </div>
+    </div>
+
+    <!-- 右栏 -->
+    <div class="right-pane">
+      <div class="chart-card">
+        <div class="pane-title">
+          <span>近 14 天 趋 势</span>
+          <span style="color:var(--brand-jade);font-family:'SF Mono',monospace;letter-spacing:.04em;">+138 分</span>
+        </div>
+        <svg class="chart-svg" viewBox="0 0 600 64" preserveAspectRatio="none">
+          <!-- 0 线 -->
+          <line x1="0" y1="40" x2="600" y2="40" stroke="rgba(31,41,51,.08)" stroke-dasharray="2,4" />
+          <!-- 区域填充 -->
+          <path d="M 0 38 L 40 30 L 80 36 L 120 22 L 160 28 L 200 18 L 240 26 L 280 14 L 320 20 L 360 12 L 400 18 L 440 8 L 480 14 L 520 6 L 560 10 L 600 4 L 600 64 L 0 64 Z" fill="rgba(43,122,61,.08)" />
+          <!-- 折线 -->
+          <path d="M 0 38 L 40 30 L 80 36 L 120 22 L 160 28 L 200 18 L 240 26 L 280 14 L 320 20 L 360 12 L 400 18 L 440 8 L 480 14 L 520 6 L 560 10 L 600 4" fill="none" stroke="#2B7A3D" stroke-width="1.6" />
+          <!-- 关键点 -->
+          <circle cx="280" cy="14" r="3" fill="#C4382E" />
+          <circle cx="440" cy="8" r="3" fill="#C4382E" />
+          <circle cx="600" cy="4" r="3" fill="#C4382E" />
+        </svg>
+      </div>
+
+      <div class="stats-strip">
+        <div class="stat"><span class="v">52%</span><span class="l">胜 率</span></div>
+        <div class="stat"><span class="v">32</span><span class="l">本 周 局 数</span></div>
+        <div class="stat"><span class="v">+84</span><span class="l">最 大 单 局</span></div>
+        <div class="stat"><span class="v">5</span><span class="l">最 长 连 胜</span></div>
+        <div class="stat"><span class="v">王哥(12局)</span><span class="l">最 常 对 手</span></div>
+      </div>
+
+      <div class="history">
+        <div class="pane-title">
+          <span>历 史 对 局</span>
+          <span style="color:var(--ink-mute);cursor:pointer;">查 看 全 部 →</span>
+        </div>
+        <div class="history-row">
+          <span class="h-date">06.13 22:30</span>
+          <span class="h-score win">+25</span>
+          <span class="h-vs">vs 王哥 · 李姐 · 小李</span>
+          <span class="h-rule">襄阳红中 · 8局 · 22min</span>
+          <span class="h-rank-delta up">↑3 段位分</span>
+        </div>
+        <div class="history-row">
+          <span class="h-date">06.11 21:00</span>
+          <span class="h-score lose">−12</span>
+          <span class="h-vs">vs 王哥 · 张姐 · 李哥</span>
+          <span class="h-rule">襄阳红中 · 8局 · 28min</span>
+          <span class="h-rank-delta">—</span>
+        </div>
+        <div class="history-row">
+          <span class="h-date">06.08 18:45</span>
+          <span class="h-score win">+8</span>
+          <span class="h-vs">vs 王哥 · 李姐 · 陈哥</span>
+          <span class="h-rule">襄阳红中 · 4局 · 12min</span>
+          <span class="h-rank-delta up">↑1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <span class="skill-watermark">QUEYOU · v0.2 mockup</span>
+</div>
+</body>
+</html>

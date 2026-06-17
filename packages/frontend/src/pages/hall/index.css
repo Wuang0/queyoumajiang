@@ -1,0 +1,156 @@
+.hall-page {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.hall-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  padding-top: 88px;
+}
+
+.hall-brand {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.hall-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 26px;
+  color: var(--ink-soft);
+}
+
+.hall-rank {
+  background: rgba(43,122,61,0.10);
+  color: var(--brand-jade);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 22px;
+}
+
+.hall-cta {
+  padding: 32px;
+  display: flex;
+  gap: 24px;
+}
+
+.hall-card {
+  flex: 1;
+  padding: 40px 24px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.hall-card.create {
+  background: linear-gradient(165deg, var(--brand-jade-soft), var(--brand-jade));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(43,122,61,0.25);
+}
+
+.hall-card.join {
+  background: #fff;
+  border: 1px solid rgba(31,41,51,0.08);
+  box-shadow: var(--shadow-1);
+}
+
+.hall-card-title {
+  font-size: 32px;
+  font-weight: 600;
+  display: block;
+}
+
+.hall-card-sub {
+  font-size: 22px;
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+/* Join dialog */
+.hall-join-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(31,41,51,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.hall-join-dialog {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  width: 500px;
+}
+
+.hall-join-title {
+  font-size: 30px;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
+
+.hall-join-input {
+  margin-top: 24px;
+  height: 80px;
+  border: 1px solid rgba(31,41,51,0.12);
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 36px;
+  letter-spacing: 12px;
+  text-align: center;
+}
+
+.hall-join-btn {
+  margin-top: 24px;
+  height: 80px;
+  background: var(--brand-jade);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 30px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hall-recent {
+  padding: 32px;
+}
+
+.hall-recent-title {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.hall-recent-empty {
+  font-size: 24px;
+  color: var(--ink-mute);
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.hall-recent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.hall-recent-score {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.hall-recent-rule {
+  font-size: 24px;
+  color: var(--ink-mute);
+}

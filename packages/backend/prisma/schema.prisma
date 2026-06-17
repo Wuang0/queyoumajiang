@@ -1,0 +1,223 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================
+// User Domain
+// =====================================================
+
+model User {
+  id            BigInt    @id @default(autoincrement())
+  guestId       String?   @unique @map("guest_id")
+  openid        String?   @unique
+  unionid       String?
+  nickname      String    @default("")
+  avatarUrl     String?   @map("avatar_url")
+  gender        Int       @default(0)
+  country       String?
+  province      String?
+  city          String?
+  rankLevel     Int       @default(1) @map("rank_level")
+  rankScore     Int       @default(0) @map("rank_score")
+  totalMatches  Int       @default(0) @map("total_matches")
+  totalWins     Int       @default(0) @map("total_wins")
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  hostedRooms     Room[]          @relation("RoomHost")
+  matchPlayers    MatchPlayer[]
+  wonMatches      Match[]         @relation("MatchWinner")
+  lostMatches     Match[]         @relation("MatchLoser")
+  dealtMatches    Match[]         @relation("MatchDealer")
+  friendships     Friendship[]    @relation("FriendOwner")
+  reverseFriends  Friendship[]    @relation("FriendOf")
+  rankHistory     RankHistory[]
+  auditLogs       AuditLog[]
+  stats           UserStats?
+
+  @@index([rankLevel, rankScore(sort: Desc)])
+  @@index([lastLoginAt(sort: Desc)])
+  @@index([unionid])
+  @@map("users")
+}
+
+model UserStats {
+  userId             BigInt    @id @map("user_id")
+  totalMatches       Int       @default(0) @map("total_matches")
+  totalWins          Int       @default(0) @map("total_wins")
+  totalLosses        Int       @default(0) @map("total_losses")
+  totalScore         Int       @default(0) @map("total_score")
+  maxSingleScore     Int       @default(0) @map("max_single_score")
+  longestWinStreak   Int       @default(0) @map("longest_win_streak")
+  longestLoseStreak  Int       @default(0) @map("longest_lose_streak")
+  selfMoCount        Int       @default(0) @map("self_mo_count")
+  jiePaoCount        Int       @default(0) @map("jie_pao_count")
+  dianPaoCount       Int       @default(0) @map("dian_pao_count")
+  huangzhuangCount   Int       @default(0) @map("huangzhuang_count")
+  favoritePartners   Json?     @map("favorite_partners")
+  currentStreak      Int       @default(0) @map("current_streak")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("user_stats")
+}
+
+// =====================================================
+// Room Domain
+// =====================================================
+
+model Room {
+  id              BigInt    @id @default(autoincrement())
+  roomCode        String    @map("room_code")
+  hostId          BigInt    @map("host_id")
+  rule            String    @default("xiangyang_redzhong")
+  baseScore       Int       @default(1) @map("base_score")
+  totalRounds     Int       @default(8) @map("total_rounds")
+  allowSpectator  Boolean   @default(false) @map("allow_spectator")
+  status          String    @default("waiting")
+  finalSeats      Json?     @map("final_seats")
+  dissolveReason  String?   @map("dissolve_reason")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  startedAt       DateTime? @map("started_at")
+  endedAt         DateTime? @map("ended_at")
+
+  host    User    @relation("RoomHost", fields: [hostId], references: [id])
+  matches Match[]
+
+  @@index([hostId, createdAt(sort: Desc)])
+  @@index([roomCode, status])
+  @@index([status, endedAt(sort: Desc)])
+  @@map("rooms")
+}
+
+// =====================================================
+// Match Domain
+// =====================================================
+
+model Match {
+  id                BigInt    @id @default(autoincrement())
+  roomId            BigInt    @map("room_id")
+  roundNo           Int       @map("round_no")
+  dealerId          BigInt    @map("dealer_id")
+  zhuangContinued   Boolean   @default(false) @map("zhuang_continued")
+  winnerId          BigInt?   @map("winner_id")
+  loserId           BigInt?   @map("loser_id")
+  winType           String?   @map("win_type")
+  fans              Int       @default(0)
+  fanBreakdown      Json?     @map("fan_breakdown")
+  startedAt         DateTime  @default(now()) @map("started_at")
+  endedAt           DateTime  @default(now()) @map("ended_at")
+
+  room      Room           @relation(fields: [roomId], references: [id])
+  winner    User?          @relation("MatchWinner", fields: [winnerId], references: [id])
+  loser     User?          @relation("MatchLoser", fields: [loserId], references: [id])
+  dealer    User           @relation("MatchDealer", fields: [dealerId], references: [id])
+  players   MatchPlayer[]
+  rankLogs  RankHistory[]
+
+  @@index([roomId, roundNo])
+  @@index([winnerId, endedAt(sort: Desc)])
+  @@index([endedAt(sort: Desc)])
+  @@map("matches")
+}
+
+model MatchPlayer {
+  id              BigInt    @id @default(autoincrement())
+  matchId         BigInt    @map("match_id")
+  userId          BigInt    @map("user_id")
+  seat            Int
+  role            String    @default("normal")
+  scoreChange     Int       @default(0) @map("score_change")
+  scoreAfter      Int       @default(0) @map("score_after")
+  handHistory     Json?     @map("hand_history")
+  trusteeSeconds  Int       @default(0) @map("trustee_seconds")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  match  Match  @relation(fields: [matchId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([matchId, userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("match_players")
+}
+
+// =====================================================
+// Social Domain
+// =====================================================
+
+model Friendship {
+  id              BigInt    @id @default(autoincrement())
+  userId          BigInt    @map("user_id")
+  friendId        BigInt    @map("friend_id")
+  source          String    @default("in_room")
+  nicknameRemark  String?   @map("nickname_remark")
+  isBlocked       Boolean   @default(false) @map("is_blocked")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  user    User  @relation("FriendOwner", fields: [userId],   references: [id])
+  friend  User  @relation("FriendOf",    fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("friendships")
+}
+
+// =====================================================
+// Rank Domain
+// =====================================================
+
+model RankHistory {
+  id            BigInt    @id @default(autoincrement())
+  userId        BigInt    @map("user_id")
+  rankBefore    Int       @map("rank_before")
+  rankAfter     Int       @map("rank_after")
+  scoreBefore   Int       @map("score_before")
+  scoreAfter    Int       @map("score_after")
+  scoreDelta    Int       @map("score_delta")
+  matchId       BigInt?   @map("match_id")
+  reason        String    @default("match")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  user   User    @relation(fields: [userId], references: [id])
+  match  Match?  @relation(fields: [matchId], references: [id])
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([matchId])
+  @@map("rank_history")
+}
+
+// =====================================================
+// Audit
+// =====================================================
+
+model AuditLog {
+  id          BigInt    @id @default(autoincrement())
+  actorId     BigInt?   @map("actor_id")
+  actorRole   String    @default("user") @map("actor_role")
+  action      String
+  targetType  String?   @map("target_type")
+  targetId    BigInt?   @map("target_id")
+  before      Json?
+  after       Json?
+  ip          String?
+  userAgent   String?   @map("user_agent")
+  extra       Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  actor  User?  @relation(fields: [actorId], references: [id])
+
+  @@index([actorId, createdAt(sort: Desc)])
+  @@index([action, createdAt(sort: Desc)])
+  @@index([targetType, targetId])
+  @@map("audit_log")
+}

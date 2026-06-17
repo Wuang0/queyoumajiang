@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 我的</title>
+<link rel="stylesheet" href="_tokens.css">
+<style>
+  .header{
+    height:48px;padding:0 24px 0 60px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(31,41,51,.06);
+    position:relative;z-index:10;
+  }
+  .title{font-size:14px;font-weight:600;letter-spacing:.18em;color:var(--ink-deep);}
+  .meta{font-size:11px;color:var(--ink-mute);letter-spacing:.04em;}
+
+  .main{
+    height:calc(100% - 48px);
+    display:grid;grid-template-columns:300px 1fr;
+    padding:18px 28px 18px 76px;gap:24px;
+  }
+
+  /* 左：用户卡 */
+  .user-card{
+    background:linear-gradient(165deg, var(--cream-paper) 0%, var(--cream-deep) 100%);
+    border-radius:var(--r-lg);
+    padding:18px;
+    box-shadow:var(--shadow-2);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .user-card::before{
+    content:"雀";position:absolute;right:-16px;bottom:-30px;
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:160px;color:rgba(43,122,61,.06);line-height:1;font-weight:600;
+  }
+
+  .user-row{display:flex;align-items:center;gap:14px;position:relative;}
+  .user-row .avatar{
+    width:64px;height:64px;font-size:24px;
+    box-shadow:0 0 0 3px var(--brand-jade), 0 6px 14px rgba(43,122,61,.25);
+  }
+  .user-meta{flex:1;}
+  .user-name{font-size:18px;font-weight:600;color:var(--ink-deep);}
+  .user-id{font-size:10px;color:var(--ink-mute);letter-spacing:.08em;font-family:"SF Mono",monospace;margin-top:2px;}
+  .edit-icon{
+    width:28px;height:28px;border-radius:50%;
+    background:rgba(31,41,51,.05);color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;cursor:pointer;
+  }
+
+  .user-rank{
+    margin-top:14px;padding-top:12px;
+    border-top:1px dashed rgba(31,41,51,.10);
+    position:relative;display:flex;align-items:center;gap:10px;
+  }
+  .rank-badge-mini{
+    width:36px;height:36px;border-radius:50%;
+    background:linear-gradient(160deg,var(--brand-jade-soft),var(--brand-jade-deep));
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-family:"STKaiti","KaiTi",serif;font-size:16px;font-weight:600;
+    box-shadow:0 4px 8px rgba(43,122,61,.20);
+  }
+  .rank-info{flex:1;}
+  .rank-info .name{font-size:13px;font-weight:600;letter-spacing:.04em;}
+  .rank-info .score{font-size:10px;color:var(--ink-mute);font-family:"SF Mono",monospace;letter-spacing:.04em;}
+
+  .quick-stats{
+    margin-top:auto;padding-top:14px;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:relative;
+  }
+  .quick-stat{text-align:center;}
+  .qs-val{font-family:"SF Mono",monospace;font-size:16px;font-weight:600;color:var(--ink-deep);}
+  .qs-label{font-size:10px;color:var(--ink-mute);letter-spacing:.08em;margin-top:2px;}
+
+  /* 右：设置项 */
+  .right-pane{display:flex;flex-direction:column;gap:10px;overflow:auto;}
+
+  .setting-group{
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(31,41,51,.06);
+    border-radius:var(--r-md);
+    overflow:hidden;
+  }
+  .group-title{
+    font-size:10px;color:var(--ink-mute);letter-spacing:.18em;
+    padding:8px 14px 4px;
+  }
+  .setting-row{
+    display:flex;align-items:center;
+    padding:10px 14px;
+    cursor:pointer;
+    transition:background .12s;
+  }
+  .setting-row + .setting-row{border-top:1px dashed rgba(31,41,51,.06);}
+  .setting-row:hover{background:rgba(43,122,61,.04);}
+  .setting-icon{
+    width:24px;height:24px;border-radius:6px;
+    background:rgba(43,122,61,.08);
+    color:var(--brand-jade);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;flex-shrink:0;
+  }
+  .setting-icon.cinnabar{background:rgba(196,56,46,.08);color:var(--cinnabar);}
+  .setting-icon.warning{background:rgba(217,136,59,.10);color:var(--warning);}
+  .setting-meta{flex:1;margin-left:12px;}
+  .setting-label{font-size:13px;color:var(--ink-deep);}
+  .setting-sub{font-size:10px;color:var(--ink-mute);margin-top:1px;letter-spacing:.04em;}
+  .setting-val{font-size:11px;color:var(--ink-mute);margin-right:8px;}
+  .setting-arrow{color:var(--ink-mute);font-size:12px;}
+
+  .toggle{
+    width:32px;height:18px;border-radius:var(--r-pill);
+    background:var(--brand-jade);position:relative;flex-shrink:0;
+  }
+  .toggle::after{
+    content:"";position:absolute;right:2px;top:2px;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.15);
+  }
+  .toggle.off{background:rgba(31,41,51,.15);}
+  .toggle.off::after{right:auto;left:2px;}
+</style>
+</head>
+<body>
+<div class="device">
+  <span class="meta-note">812 × 375 · 我的页</span>
+
+  <div class="header">
+    <div style="width:32px;"></div>
+    <div class="title">我 的</div>
+    <div class="meta">QUEYOU · v0.2.0</div>
+  </div>
+
+  <div class="main">
+    <!-- 左：用户卡 -->
+    <div class="user-card">
+      <div class="user-row">
+        <div class="avatar">王</div>
+        <div class="user-meta">
+          <div class="user-name">王 哥</div>
+          <div class="user-id">ID: 4928 1037</div>
+        </div>
+        <div class="edit-icon">✎</div>
+      </div>
+
+      <div class="user-rank">
+        <div class="rank-badge-mini">叁</div>
+        <div class="rank-info">
+          <div class="name">雀友 · 三段</div>
+          <div class="score">累计 +218 · 距四段 282</div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="quick-stat">
+          <div class="qs-val">156</div>
+          <div class="qs-label">总 对 局</div>
+        </div>
+        <div class="quick-stat">
+          <div class="qs-val">52%</div>
+          <div class="qs-label">总 胜 率</div>
+        </div>
+        <div class="quick-stat">
+          <div class="qs-val">12</div>
+          <div class="qs-label">好 友 数</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：设置项 -->
+    <div class="right-pane">
+      <div class="setting-group">
+        <div class="group-title">游 戏 设 置</div>
+        <div class="setting-row">
+          <div class="setting-icon">♪</div>
+          <div class="setting-meta">
+            <div class="setting-label">音效</div>
+            <div class="setting-sub">出牌、碰杠、胡牌音效</div>
+          </div>
+          <div class="toggle"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-icon">≋</div>
+          <div class="setting-meta">
+            <div class="setting-label">震动反馈</div>
+            <div class="setting-sub">出牌、胡牌时震动</div>
+          </div>
+          <div class="toggle"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-icon warning">🎤</div>
+          <div class="setting-meta">
+            <div class="setting-label">默认麦克风状态</div>
+            <div class="setting-sub">进房后初始模式</div>
+          </div>
+          <span class="setting-val">自由麦</span>
+          <span class="setting-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="group-title">隐 私 与 通 知</div>
+        <div class="setting-row">
+          <div class="setting-icon">🔔</div>
+          <div class="setting-meta">
+            <div class="setting-label">好友邀请通知</div>
+          </div>
+          <div class="toggle"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-icon">👁</div>
+          <div class="setting-meta">
+            <div class="setting-label">允许好友查看战绩</div>
+          </div>
+          <div class="toggle off"></div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="group-title">关 于 与 帮 助</div>
+        <div class="setting-row">
+          <div class="setting-icon">📜</div>
+          <div class="setting-meta"><div class="setting-label">规则说明 · 襄阳红中癞子</div></div>
+          <span class="setting-arrow">›</span>
+        </div>
+        <div class="setting-row">
+          <div class="setting-icon">💬</div>
+          <div class="setting-meta"><div class="setting-label">意见反馈与客服</div></div>
+          <span class="setting-arrow">›</span>
+        </div>
+        <div class="setting-row">
+          <div class="setting-icon cinnabar">⚠</div>
+          <div class="setting-meta">
+            <div class="setting-label">健康游戏提示</div>
+            <div class="setting-sub">合理安排时间，文明游戏</div>
+          </div>
+          <span class="setting-arrow">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <span class="skill-watermark">QUEYOU · v0.2 mockup</span>
+</div>
+</body>
+</html>

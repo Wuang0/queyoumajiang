@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 对局页 (横屏)</title>
+<link rel="stylesheet" href="_tokens.css">
+<style>
+  .device{
+    background:#3D5C45;
+    background-image:
+      radial-gradient(ellipse at center, rgba(43,122,61,.18) 0%, rgba(15,40,22,.45) 80%),
+      repeating-linear-gradient(135deg, rgba(0,0,0,.04) 0 1px, transparent 1px 6px),
+      repeating-linear-gradient(45deg, rgba(0,0,0,.03) 0 1px, transparent 1px 9px);
+  }
+  .device::before{background:#000;}
+
+  /* ===== Top status bar ===== */
+  .topbar{
+    position:absolute;top:8px;left:60px;right:14px;
+    display:flex;align-items:center;justify-content:space-between;
+    z-index:10;
+    height:24px;
+  }
+  .topbar-left, .topbar-right{display:flex;align-items:center;gap:10px;}
+  .top-icon{
+    width:24px;height:24px;border-radius:6px;
+    background:rgba(0,0,0,.28);
+    color:rgba(255,255,255,.85);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;cursor:pointer;
+  }
+  .top-pill{
+    padding:3px 10px;border-radius:var(--r-pill);
+    background:rgba(0,0,0,.28);
+    color:rgba(255,255,255,.85);
+    font-size:10px;letter-spacing:.08em;
+  }
+  .top-pill .v{color:#fff;font-weight:600;}
+  .top-pill.cinnabar{background:rgba(196,56,46,.85);}
+
+  /* ===== 4 家座位 ===== */
+  .opponent{
+    position:absolute;
+    color:rgba(255,255,255,.92);
+  }
+  /* 对家 - 顶部 */
+  .opponent.top{
+    top:38px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:flex-start;gap:14px;
+  }
+  .opponent.top .info{display:flex;align-items:center;gap:8px;}
+  .opp-avatar{
+    width:36px;height:36px;border:2px solid rgba(255,255,255,.25);
+  }
+  .opp-meta{font-size:11px;}
+  .opp-meta .name{font-weight:600;}
+  .opp-meta .score{font-family:"SF Mono",monospace;letter-spacing:.04em;}
+  .opp-meta .score.win{color:#A4E0B2;}
+  .opp-meta .score.lose{color:#FFB5AE;}
+  .speaking{
+    box-shadow:0 0 0 3px rgba(91,165,106,.4), 0 0 12px rgba(91,165,106,.55);
+    animation:breathe 1.4s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{box-shadow:0 0 0 3px rgba(91,165,106,.35),0 0 12px rgba(91,165,106,.45);}
+    50%{box-shadow:0 0 0 5px rgba(91,165,106,.55),0 0 18px rgba(91,165,106,.65);}
+  }
+
+  /* 顶部对家手牌（背面横排） */
+  .opp-hand-top{
+    display:flex;gap:1px;
+  }
+  .opp-hand-top .tile{
+    width:14px;height:20px;font-size:0;border-radius:3px;
+  }
+  /* 顶部 已碰/出牌 */
+  .opp-melds{display:flex;flex-direction:column;gap:3px;font-size:10px;color:rgba(255,255,255,.7);}
+  .meld-row{display:flex;gap:2px;}
+  .meld-row .tile{width:14px;height:20px;font-size:11px;border-radius:3px;}
+
+  /* 左/右家：竖排 */
+  .opponent.left{
+    left:64px;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .opponent.right{
+    right:14px;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .opp-hand-side{
+    display:flex;flex-direction:column;gap:1px;
+  }
+  .opp-hand-side .tile{width:18px;height:13px;font-size:0;border-radius:3px;}
+
+  /* ===== 中央桌面：出牌堆 ===== */
+  .table-center{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:240px;height:130px;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;
+    gap:6px;
+  }
+  .wind-indicator{
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:36px;color:rgba(255,255,255,.10);
+    position:absolute;
+    pointer-events:none;
+  }
+  .remaining{
+    font-family:"SF Mono",monospace;
+    font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.18em;
+    z-index:1;
+  }
+  .discard-pile{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:2px;
+    max-width:200px;
+    z-index:1;
+  }
+  .discard-pile .tile{width:20px;height:28px;font-size:14px;border-radius:3px;}
+  .discard-pile .tile.fresh{
+    box-shadow:var(--shadow-tile), 0 0 0 2px var(--cinnabar);
+    transform:translateY(-3px) rotate(-3deg);
+  }
+
+  /* ===== 自家手牌区 ===== */
+  .my-zone{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:8px 14px 12px 76px;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .my-meta-row{
+    display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.85);
+    font-size:11px;
+  }
+  .my-meta-row .avatar{width:24px;height:24px;font-size:11px;border-color:rgba(255,255,255,.3);}
+  .my-meta-row .name{font-weight:600;}
+  .my-meta-row .score{font-family:"SF Mono",monospace;color:#A4E0B2;}
+  .my-meta-row .ting-tip{
+    margin-left:auto;
+    background:rgba(196,56,46,.85);color:#fff;
+    padding:2px 8px;border-radius:var(--r-pill);
+    font-size:10px;letter-spacing:.04em;
+    display:flex;align-items:center;gap:4px;
+  }
+  .ting-tip .ti{
+    background:var(--cream-paper);color:var(--cinnabar);
+    border-radius:2px;font-family:"STKaiti","KaiTi",serif;
+    padding:0 3px;font-size:10px;
+  }
+
+  /* 手牌+操作栏并排 */
+  .hand-action-row{
+    display:flex;align-items:flex-end;gap:10px;
+  }
+  .my-hand{
+    display:flex;gap:3px;
+    flex:1;
+  }
+  .my-hand .tile{
+    width:32px;height:46px;font-size:24px;border-radius:4px;
+    transition:transform .12s;
+    cursor:pointer;
+  }
+  .my-hand .tile:hover{transform:translateY(-4px);}
+  .my-hand .tile.draw{
+    margin-left:6px;
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-tile), 0 0 0 1.5px var(--cinnabar);
+  }
+  .my-hand .tile.wild{
+    color:var(--cinnabar);
+    box-shadow:var(--shadow-tile), 0 0 12px var(--cinnabar-glow), inset 0 0 0 1px rgba(196,56,46,.35);
+    animation:wild-glow 2s ease-in-out infinite;
+  }
+  @keyframes wild-glow{
+    0%,100%{box-shadow:var(--shadow-tile), 0 0 8px rgba(196,56,46,.35), inset 0 0 0 1px rgba(196,56,46,.35);}
+    50%{box-shadow:var(--shadow-tile), 0 0 16px rgba(196,56,46,.65), inset 0 0 0 1px rgba(196,56,46,.55);}
+  }
+
+  /* 操作栏 */
+  .action-bar{
+    display:flex;gap:5px;align-items:flex-end;
+  }
+  .mic-btn{
+    width:46px;height:46px;border-radius:50%;
+    background:linear-gradient(160deg,var(--brand-jade-soft) 0%, var(--brand-jade) 100%);
+    color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-size:14px;font-weight:600;
+    box-shadow:0 4px 12px rgba(43,122,61,.40), inset 0 1px 0 rgba(255,255,255,.18);
+    cursor:pointer;position:relative;
+  }
+  .mic-btn .mic-state{
+    position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+    font-size:9px;color:rgba(255,255,255,.7);
+    white-space:nowrap;letter-spacing:.04em;
+  }
+  .act-btn{
+    min-width:46px;height:46px;border-radius:50%;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    color:rgba(255,255,255,.45);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:600;letter-spacing:.04em;
+    cursor:not-allowed;
+  }
+  .act-btn.active{
+    background:linear-gradient(160deg,var(--cream-paper) 0%, var(--cream-deep) 100%);
+    color:var(--ink-deep);
+    border-color:var(--gold-faint);
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,.20);
+  }
+  .act-btn.hu{
+    background:linear-gradient(160deg,var(--cinnabar-soft) 0%, var(--cinnabar) 100%);
+    color:#fff;
+    border-color:var(--cinnabar);
+    box-shadow:0 4px 12px rgba(196,56,46,.45), inset 0 1px 0 rgba(255,255,255,.18);
+    animation:hu-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes hu-pulse{
+    0%,100%{box-shadow:0 4px 12px rgba(196,56,46,.40), inset 0 1px 0 rgba(255,255,255,.18);}
+    50%{box-shadow:0 4px 18px rgba(196,56,46,.70), inset 0 1px 0 rgba(255,255,255,.22);}
+  }
+
+  /* 我打出的牌（左下） */
+  .my-discard{
+    position:absolute;left:90px;bottom:90px;
+    display:flex;gap:2px;
+  }
+  .my-discard .tile{width:20px;height:28px;font-size:14px;border-radius:3px;}
+
+  /* 语音 HUD 浮层 */
+  .voice-hud{
+    position:absolute;top:80px;right:60px;
+    background:rgba(0,0,0,.5);
+    color:rgba(255,255,255,.92);
+    padding:5px 12px;border-radius:var(--r-pill);
+    font-size:11px;display:flex;align-items:center;gap:6px;
+    backdrop-filter:blur(8px);
+  }
+  .voice-hud::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:#5BA56A;
+    animation:pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="device">
+  <span class="meta-note">812 × 375 · 对局页 · 襄阳红中癞子 (3/8 局)</span>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="top-icon" title="退出">⏸</div>
+      <div class="top-pill">房 <span class="v">123456</span></div>
+      <div class="top-pill">襄阳红中癞子</div>
+    </div>
+    <div class="topbar-right">
+      <div class="top-pill">局 <span class="v">3 / 8</span></div>
+      <div class="top-pill cinnabar">⏱ 00:23</div>
+      <div class="top-icon" title="设置">⚙</div>
+    </div>
+  </div>
+
+  <!-- 对家 -->
+  <div class="opponent top">
+    <div class="opp-melds">
+      <div class="meld-row">
+        <div class="tile cinnabar">中</div><div class="tile cinnabar">中</div><div class="tile cinnabar">中</div>
+      </div>
+    </div>
+    <div class="info">
+      <div class="opp-meta" style="text-align:right;">
+        <div class="name">李姐</div>
+        <div class="score win">+12</div>
+      </div>
+      <div class="avatar opp-avatar">李</div>
+    </div>
+    <div class="opp-hand-top">
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+    </div>
+  </div>
+
+  <!-- 上家 -->
+  <div class="opponent left">
+    <div class="avatar opp-avatar speaking">李</div>
+    <div class="opp-meta" style="text-align:center;">
+      <div class="name">小李</div>
+      <div class="score win">+5</div>
+    </div>
+    <div class="opp-hand-side">
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+    </div>
+  </div>
+
+  <!-- 下家 -->
+  <div class="opponent right">
+    <div class="avatar opp-avatar">张</div>
+    <div class="opp-meta" style="text-align:center;">
+      <div class="name">张姐</div>
+      <div class="score lose">-8</div>
+    </div>
+    <div class="opp-hand-side">
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+      <div class="tile back"></div><div class="tile back"></div><div class="tile back"></div><div class="tile back"></div>
+      <div class="tile back"></div><div class="tile back"></div>
+    </div>
+  </div>
+
+  <!-- 中央 -->
+  <div class="table-center">
+    <span class="wind-indicator">東</span>
+    <span class="remaining">余 38 张</span>
+    <div class="discard-pile">
+      <div class="tile">一</div>
+      <div class="tile cinnabar">五</div>
+      <div class="tile">⊜</div>
+      <div class="tile">⊞</div>
+      <div class="tile">东</div>
+      <div class="tile cinnabar">九</div>
+      <div class="tile">⊜</div>
+      <div class="tile">南</div>
+      <div class="tile">三</div>
+      <div class="tile fresh cinnabar">中</div>
+    </div>
+  </div>
+
+  <!-- 语音 HUD -->
+  <div class="voice-hud">小李 发言中</div>
+
+  <!-- 自家区 -->
+  <div class="my-zone">
+    <div class="my-meta-row">
+      <div class="avatar">王</div>
+      <span class="name">王哥(房主)</span>
+      <span class="rank-pill" style="background:rgba(255,255,255,.12);color:#fff;">雀友 · 三段</span>
+      <span class="score">+25</span>
+      <span class="ting-tip">听 <span class="ti">⊠</span><span class="ti">⊟</span><span class="ti">⊡</span></span>
+    </div>
+
+    <div class="hand-action-row">
+      <div class="my-hand">
+        <div class="tile">一</div>
+        <div class="tile">二</div>
+        <div class="tile">三</div>
+        <div class="tile">⊞</div>
+        <div class="tile">⊟</div>
+        <div class="tile">⊠</div>
+        <div class="tile">⊡</div>
+        <div class="tile">⊜</div>
+        <div class="tile">⊝</div>
+        <div class="tile">⊞</div>
+        <div class="tile cinnabar wild">中</div>
+        <div class="tile cinnabar wild">中</div>
+        <div class="tile draw">九</div>
+      </div>
+
+      <div class="action-bar">
+        <div class="mic-btn">
+          🎤
+          <span class="mic-state">自由麦</span>
+        </div>
+        <div class="act-btn">过</div>
+        <div class="act-btn">碰</div>
+        <div class="act-btn active">杠</div>
+        <div class="act-btn active">听</div>
+        <div class="act-btn hu">胡</div>
+      </div>
+    </div>
+  </div>
+
+  <span class="skill-watermark">QUEYOU · v0.2 mockup</span>
+</div>
+</body>
+</html>

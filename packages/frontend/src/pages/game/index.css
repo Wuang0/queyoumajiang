@@ -1,0 +1,399 @@
+.game-page {
+  min-height: 100vh;
+  background: var(--cream, #F4EFE6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 44px;
+}
+
+/* ==================== Top Bar ==================== */
+.game-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+}
+
+.game-round-info {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink-deep, #1F2933);
+}
+
+.game-rule-name {
+  font-size: 22px;
+  color: var(--brand-jade, #2B7A3D);
+  background: rgba(43,122,61,0.08);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.game-wall-count {
+  font-size: 22px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.game-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-stop-btn {
+  font-size: 20px;
+  color: var(--cinnabar, #C4382E);
+  padding: 4px 12px;
+  border: 1px solid rgba(196,56,46,0.3);
+  border-radius: 8px;
+}
+
+/* ==================== Opposite Player (Top) ==================== */
+.game-opp-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.game-opp-info {
+  margin-bottom: 4px;
+}
+
+.game-opp-name {
+  font-size: 24px;
+  color: var(--ink-deep, #1F2933);
+  font-weight: 500;
+}
+
+.game-ting-tag {
+  color: var(--cinnabar, #C4382E);
+  font-size: 20px;
+  margin-left: 6px;
+  font-weight: 700;
+}
+
+.game-opp-hand-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1px;
+  flex-wrap: wrap;
+  max-width: 360px;
+}
+
+.game-opp-melds {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.game-opp-discards {
+  display: flex;
+  gap: 1px;
+  margin-top: 4px;
+  opacity: 0.6;
+}
+
+/* ==================== Middle Area ==================== */
+.game-middle {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  max-height: 280px;
+  overflow: hidden;
+}
+
+.game-side-left,
+.game-side-right {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8px;
+}
+
+.game-side-name {
+  font-size: 20px;
+  color: var(--ink-soft, #52606D);
+  writing-mode: vertical-rl;
+}
+
+.game-side-hand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Center */
+.game-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-center-header {
+  margin-bottom: 8px;
+}
+
+.game-turn-text {
+  font-size: 24px;
+  color: var(--brand-jade, #2B7A3D);
+  font-weight: 600;
+}
+
+.game-center-discards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 280px;
+  padding: 8px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 12px;
+  min-height: 60px;
+}
+
+.game-last-discard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.game-last-discard-label {
+  font-size: 20px;
+  color: var(--ink-mute, #9AA5B1);
+  margin-top: 4px;
+}
+
+/* ==================== Own Melds ==================== */
+.game-own-melds {
+  display: flex;
+  gap: 6px;
+  padding: 4px 16px;
+  justify-content: center;
+  min-height: 36px;
+}
+
+.game-meld-row {
+  display: flex;
+  gap: 1px;
+}
+
+/* ==================== Round Result Banner ==================== */
+.game-round-result {
+  background: linear-gradient(135deg, #fff9e6, #fff);
+  border: 2px solid var(--brand-jade, #2B7A3D);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 8px 16px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.game-round-result-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--brand-jade, #2B7A3D);
+  display: block;
+}
+
+.game-round-result-fans {
+  font-size: 22px;
+  color: var(--cinnabar, #C4382E);
+  margin-top: 4px;
+  display: block;
+}
+
+.game-round-result-scores {
+  font-size: 22px;
+  color: var(--ink-soft, #52606D);
+  margin-top: 6px;
+  display: block;
+}
+
+/* ==================== Countdown ==================== */
+.game-countdown {
+  text-align: center;
+  padding: 4px 0;
+  font-size: 22px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.game-countdown.urgent {
+  color: var(--cinnabar, #C4382E);
+  font-weight: 700;
+  font-size: 26px;
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ==================== Hand Area ==================== */
+.game-hand-area {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+  background: linear-gradient(0deg, rgba(43,122,61,0.06), transparent);
+}
+
+.game-hand-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 20px;
+  min-width: max-content;
+}
+
+/* ==================== Action Bar ==================== */
+.game-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 24px 24px;
+  min-height: 60px;
+}
+
+.game-act-btn {
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-size: 28px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s;
+  text-align: center;
+}
+
+.game-act-btn:active {
+  transform: scale(0.95);
+}
+
+.game-act-btn.pong {
+  background: var(--brand-jade, #2B7A3D);
+  color: #fff;
+}
+
+.game-act-btn.kong {
+  background: #5BA56A;
+  color: #fff;
+}
+
+.game-act-btn.hu {
+  background: var(--cinnabar, #C4382E);
+  color: #fff;
+}
+
+.game-act-btn.pass {
+  background: #fff;
+  color: var(--ink-soft, #52606D);
+  border: 2px solid #d0d5dd;
+}
+
+.game-act-btn.ting {
+  background: var(--warning, #D9883B);
+  color: #fff;
+}
+
+.game-act-btn.selfmo {
+  background: linear-gradient(135deg, var(--brand-jade), var(--cinnabar));
+  color: #fff;
+}
+
+.game-act-hint {
+  font-size: 26px;
+  color: var(--ink-mute, #9AA5B1);
+  padding: 12px 0;
+}
+
+/* ==================== Settlement Overlay ==================== */
+.game-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(31,41,51,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.game-settlement {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 32px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+}
+
+.game-settlement-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink-deep, #1F2933);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.game-rank-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.game-rank-num {
+  font-size: 28px;
+  width: 40px;
+}
+
+.game-rank-name {
+  flex: 1;
+  font-size: 26px;
+  color: var(--ink-deep, #1F2933);
+  text-align: left;
+}
+
+.game-rank-score {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.game-rank-score.win {
+  color: var(--brand-jade, #2B7A3D);
+}
+
+.game-rank-score.lose {
+  color: var(--cinnabar, #C4382E);
+}
+
+.game-settlement-btn {
+  margin-top: 28px;
+  padding: 14px;
+  background: var(--brand-jade, #2B7A3D);
+  color: #fff;
+  border-radius: 14px;
+  font-size: 28px;
+  font-weight: 600;
+  cursor: pointer;
+}

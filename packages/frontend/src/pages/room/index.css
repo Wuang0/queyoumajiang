@@ -1,0 +1,250 @@
+.room-page {
+  min-height: 100vh;
+  background: var(--cream, #F4EFE6);
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  padding-top: 88px;
+}
+
+/* Header */
+.room-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.room-back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.room-back-arrow {
+  font-size: 28px;
+  color: var(--ink-deep, #1F2933);
+}
+
+.room-code-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.room-code-label {
+  font-size: 24px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.room-code-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ink-deep, #1F2933);
+  letter-spacing: 4px;
+  font-family: monospace;
+}
+
+.room-copy-btn {
+  font-size: 22px;
+  color: var(--brand-jade, #2B7A3D);
+  margin-top: 4px;
+}
+
+/* Rule */
+.room-rule {
+  text-align: center;
+  padding: 12px 0 20px;
+}
+
+.room-rule-text {
+  font-size: 26px;
+  color: var(--ink-soft, #52606D);
+  background: rgba(43, 122, 61, 0.08);
+  padding: 8px 20px;
+  border-radius: 999px;
+}
+
+/* Seat Grid */
+.room-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  max-height: 500px;
+  margin: 16px 0;
+}
+
+.room-seat {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-1, 0 4px 12px rgba(31,41,51,0.06));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.room-seat.me {
+  border-color: var(--brand-jade, #2B7A3D);
+}
+
+.room-seat.ready {
+  border-color: rgba(43, 122, 61, 0.3);
+  background: linear-gradient(135deg, #fff, #f0faf2);
+}
+
+.room-seat.empty {
+  border: 2px dashed #d0d5dd;
+  background: rgba(244, 239, 230, 0.5);
+}
+
+/* Empty seat */
+.room-seat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.room-seat-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px dashed var(--ink-mute, #9AA5B1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.room-seat-empty-text {
+  font-size: 24px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+/* Occupied seat */
+.room-seat-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.room-seat-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--brand-jade-soft, #5BA56A);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.room-seat-nickname {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink-deep, #1F2933);
+}
+
+.room-seat-label {
+  font-size: 22px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.room-seat-host {
+  font-size: 20px;
+  color: var(--cinnabar, #C4382E);
+  background: rgba(196, 56, 46, 0.08);
+  padding: 2px 10px;
+  border-radius: 8px;
+}
+
+.room-seat-status {
+  font-size: 24px;
+  margin-top: 4px;
+}
+
+.room-seat-status.green {
+  color: var(--brand-jade, #2B7A3D);
+  font-weight: 600;
+}
+
+.room-seat-status.muted {
+  color: var(--warning, #D9883B);
+}
+
+/* Tips */
+.room-tip {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.room-tip-text {
+  font-size: 26px;
+  color: var(--ink-mute, #9AA5B1);
+}
+
+.room-tip.ready .room-tip-text {
+  color: var(--brand-jade, #2B7A3D);
+  font-weight: 600;
+}
+
+/* Actions */
+.room-actions {
+  display: flex;
+  gap: 16px;
+  padding: 20px 0 40px;
+  flex-wrap: wrap;
+}
+
+.room-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  background: #fff;
+  color: var(--ink-deep, #1F2933);
+  box-shadow: var(--shadow-1, 0 4px 12px rgba(31,41,51,0.06));
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.room-btn:active {
+  transform: scale(0.97);
+}
+
+.room-btn.active {
+  background: var(--brand-jade, #2B7A3D);
+  color: #fff;
+}
+
+.room-btn.start {
+  background: linear-gradient(135deg, var(--brand-jade, #2B7A3D), #3d8f50);
+  color: #fff;
+}
+
+.room-btn.start.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.room-btn.leave {
+  background: transparent;
+  color: var(--ink-mute, #9AA5B1);
+  box-shadow: none;
+  font-size: 26px;
+}

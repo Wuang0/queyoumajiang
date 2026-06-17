@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 异常态合集</title>
+<link rel="stylesheet" href="_tokens.css">
+<style>
+  body{padding:0;display:block;background:#1a1a1a;}
+  .multi-stage{
+    display:grid;
+    grid-template-columns:repeat(2, 812px);
+    gap:36px;
+    padding:24px;
+    justify-content:center;
+    align-content:center;
+    min-height:100vh;
+  }
+  .device-mini{
+    width:812px;height:375px;
+    background:var(--cream);
+    border-radius:32px;
+    overflow:hidden;
+    box-shadow:0 40px 120px rgba(0,0,0,.45),0 0 0 8px #111,0 0 0 9px #2a2a2a;
+    position:relative;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(184,151,91,.04) 0 1px, transparent 1px 8px),
+      repeating-linear-gradient(45deg, rgba(184,151,91,.03) 0 1px, transparent 1px 11px);
+  }
+  .device-mini::before{
+    content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:30px;height:108px;background:#0a0a0a;border-radius:18px;z-index:50;
+  }
+  .scenario-label{
+    position:absolute;top:-30px;left:0;
+    font-family:"SF Mono",monospace;font-size:11px;color:rgba(255,255,255,.5);
+    letter-spacing:.05em;
+  }
+
+  .mask{
+    position:absolute;left:60px;right:0;top:0;bottom:0;
+    background:rgba(31,41,51,.78);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+  }
+  .mask-card{
+    text-align:center;
+    padding:24px 36px;
+    max-width:520px;
+  }
+  .mask-icon{
+    width:56px;height:56px;border-radius:50%;
+    margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;
+  }
+  .mask-icon.warning{background:rgba(217,136,59,.20);color:var(--warning);}
+  .mask-icon.danger{background:rgba(196,56,46,.20);color:var(--cinnabar-soft);}
+  .mask-icon.info{background:rgba(91,165,106,.20);color:var(--brand-jade-soft);}
+
+  .mask-title{font-size:16px;font-weight:600;letter-spacing:.18em;}
+  .mask-sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:8px;line-height:1.6;letter-spacing:.04em;}
+  .mask-counter{
+    font-family:"SF Mono",monospace;
+    font-size:32px;color:var(--cinnabar-soft);font-weight:600;
+    margin-top:14px;letter-spacing:.04em;
+  }
+  .mask-counter-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.18em;margin-top:2px;}
+
+  .mask-actions{display:flex;gap:10px;margin-top:18px;justify-content:center;}
+  .mask-btn{
+    padding:8px 18px;border-radius:var(--r-md);
+    font-size:12px;font-weight:600;letter-spacing:.08em;
+    cursor:pointer;
+  }
+  .mask-btn.primary{
+    background:linear-gradient(165deg,var(--brand-jade-soft) 0%, var(--brand-jade) 70%);
+    color:#fff;
+  }
+  .mask-btn.secondary{
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.18);
+  }
+
+  /* 旋转加载 */
+  .spin{
+    width:40px;height:40px;border-radius:50%;
+    border:3px solid rgba(255,255,255,.15);
+    border-top-color:var(--brand-jade-soft);
+    margin:0 auto 14px;
+    animation:spin 1.2s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* 底部背景：用对局页缩略 */
+  .bg-game{
+    position:absolute;left:60px;right:0;top:0;bottom:0;
+    background:#3D5C45;
+    background-image:
+      radial-gradient(ellipse at center, rgba(43,122,61,.18) 0%, rgba(15,40,22,.45) 80%);
+    overflow:hidden;
+  }
+  .bg-game::after{
+    content:"";position:absolute;inset:0;background:rgba(0,0,0,.10);
+  }
+  .bg-game .ghost-tile{
+    position:absolute;
+    width:18px;height:24px;border-radius:3px;
+    background:linear-gradient(170deg, rgba(251,247,238,.35), rgba(232,223,206,.30));
+    box-shadow:var(--shadow-tile);
+    opacity:.45;
+  }
+  .bg-game .ghost-tile.t1{ left:30%; top:30%; }
+  .bg-game .ghost-tile.t2{ left:35%; top:30%; }
+  .bg-game .ghost-tile.t3{ left:40%; top:30%; }
+  .bg-game .ghost-tile.t4{ left:45%; top:30%; }
+  .bg-game .ghost-tile.t5{ left:50%; top:30%; }
+  .bg-game .ghost-tile.t6{ left:55%; top:30%; }
+
+  /* hall 背景模拟 */
+  .bg-hall{
+    position:absolute;left:60px;right:0;top:0;bottom:0;
+    opacity:.4;
+    background:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+  }
+</style>
+</head>
+<body>
+<div class="multi-stage">
+  <!-- 1. 重连中 -->
+  <div class="device-mini">
+    <span class="scenario-label">异常 1/4 · 重 连 中（断线 30s 内）</span>
+    <div class="bg-game">
+      <div class="ghost-tile t1"></div><div class="ghost-tile t2"></div><div class="ghost-tile t3"></div>
+      <div class="ghost-tile t4"></div><div class="ghost-tile t5"></div><div class="ghost-tile t6"></div>
+    </div>
+    <div class="mask">
+      <div class="mask-card">
+        <div class="spin"></div>
+        <div class="mask-title">网 络 已 断 开 · 正 在 重 连</div>
+        <div class="mask-sub">你的座位已为你保留 · 重连成功后自动恢复</div>
+        <div class="mask-counter">23 s</div>
+        <div class="mask-counter-label">剩 余 重 连 时 间</div>
+        <div class="mask-actions">
+          <div class="mask-btn primary">手 动 重 试</div>
+          <div class="mask-btn secondary">回 到 大 厅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 重连失败 -->
+  <div class="device-mini">
+    <span class="scenario-label">异常 2/4 · 重 连 失 败（30s 超时）</span>
+    <div class="bg-game">
+      <div class="ghost-tile t1"></div><div class="ghost-tile t2"></div><div class="ghost-tile t3"></div>
+    </div>
+    <div class="mask">
+      <div class="mask-card">
+        <div class="mask-icon danger">⚠</div>
+        <div class="mask-title">网 络 无 法 恢 复</div>
+        <div class="mask-sub">你的对局已暂停 · 60 秒内可重进同一房间继续<br>超时后系统将以 AI 托管完成本局</div>
+        <div class="mask-actions">
+          <div class="mask-btn primary">立 刻 重 进</div>
+          <div class="mask-btn secondary">回 到 大 厅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 房间解散 -->
+  <div class="device-mini">
+    <span class="scenario-label">异常 3/4 · 房 间 已 解 散（房主退出）</span>
+    <div class="bg-hall"></div>
+    <div class="mask">
+      <div class="mask-card">
+        <div class="mask-icon warning">⌧</div>
+        <div class="mask-title">房 间 已 解 散</div>
+        <div class="mask-sub">房主"王哥"主动解散了房间 1 2 3 4 5 6<br>本局战绩不计入段位</div>
+        <div class="mask-actions">
+          <div class="mask-btn primary">回 到 大 厅</div>
+          <div class="mask-btn secondary">查 看 战 绩</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TRTC 失败 -->
+  <div class="device-mini">
+    <span class="scenario-label">异常 4/4 · 语 音 不 可 用（TRTC 推流 3 次失败 · 不阻塞游戏）</span>
+    <div class="bg-game">
+      <div class="ghost-tile t1"></div><div class="ghost-tile t2"></div>
+      <div class="ghost-tile t3"></div><div class="ghost-tile t4"></div>
+    </div>
+    <!-- 顶部 toast 而非全屏遮罩 -->
+    <div style="position:absolute;left:50%;top:50px;transform:translateX(-50%);
+                background:rgba(31,41,51,.92);color:#fff;padding:14px 24px;border-radius:14px;
+                display:flex;align-items:center;gap:14px;
+                backdrop-filter:blur(8px);
+                box-shadow:0 12px 32px rgba(0,0,0,.40);
+                z-index:30;">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(217,136,59,.20);
+                  color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:16px;">🎤</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;letter-spacing:.08em;">语 音 不 可 用</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;letter-spacing:.04em;">网络限制 · 游戏可继续 · 30 秒后自动重试</div>
+      </div>
+      <div style="margin-left:14px;font-size:11px;color:var(--brand-jade-soft);font-weight:600;cursor:pointer;letter-spacing:.08em;">立 刻 重 试</div>
+      <div style="margin-left:6px;color:rgba(255,255,255,.4);font-size:14px;cursor:pointer;">×</div>
+    </div>
+    <!-- 游戏继续，无遮罩 -->
+  </div>
+</div>
+</body>
+</html>

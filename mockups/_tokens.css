@@ -1,0 +1,112 @@
+/* ============================================================
+   雀友麻将 · 共享设计 Token (现代东方茶馆 · 横屏)
+   所有 mockup HTML 共享，避免重复
+   ============================================================ */
+:root{
+  /* 色板 */
+  --brand-jade:#2B7A3D;
+  --brand-jade-soft:#5BA56A;
+  --brand-jade-deep:#1F5A2D;
+  --brand-jade-glow:rgba(43,122,61,.18);
+  --ink-deep:#1F2933;
+  --ink-soft:#52606D;
+  --ink-mute:#9AA5B1;
+  --ink-faint:#CBD2D9;
+  --cream:#F4EFE6;
+  --cream-deep:#E8DFCE;
+  --cream-darker:#D8CFB8;
+  --cream-paper:#FBF7EE;
+  --cinnabar:#C4382E;
+  --cinnabar-soft:#D85C52;
+  --cinnabar-glow:rgba(196,56,46,.22);
+  --warning:#D9883B;
+  --gold-faint:#B8975B;
+  --mask:rgba(31,41,51,.55);
+  --tile-edge:rgba(184,151,91,.22);
+
+  /* 阴影 */
+  --shadow-1:0 4px 12px rgba(31,41,51,.06);
+  --shadow-2:0 12px 32px rgba(31,41,51,.10);
+  --shadow-3:0 24px 64px rgba(31,41,51,.14);
+  --shadow-tile:0 2px 0 rgba(216,207,184,.9), 0 6px 14px rgba(31,41,51,.10), inset 0 0 0 1px rgba(184,151,91,.18);
+
+  /* 圆角 */
+  --r-xs:6px; --r-sm:10px; --r-md:14px; --r-lg:20px; --r-pill:999px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--ink-deep);}
+body{
+  background:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+.device{
+  width:812px;height:375px;
+  background:var(--cream);
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:0 40px 120px rgba(0,0,0,.45),0 0 0 8px #111,0 0 0 9px #2a2a2a;
+  position:relative;
+  /* 米麻底纹 */
+  background-image:
+    repeating-linear-gradient(135deg, rgba(184,151,91,.04) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(45deg, rgba(184,151,91,.03) 0 1px, transparent 1px 11px);
+}
+/* 横屏 Dynamic Island */
+.device::before{
+  content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:30px;height:108px;background:#0a0a0a;border-radius:18px;z-index:50;
+}
+
+/* 通用：牌面 */
+.tile{
+  background:linear-gradient(170deg,var(--cream-paper) 0%, var(--cream-deep) 100%);
+  border-radius:var(--r-xs);
+  box-shadow:var(--shadow-tile);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"STKaiti","KaiTi",serif;
+  color:var(--ink-deep);
+  user-select:none;
+}
+.tile.cinnabar{color:var(--cinnabar);}
+.tile.back{
+  background:linear-gradient(160deg, #4F8E5C 0%, var(--brand-jade) 60%, var(--brand-jade-deep) 100%);
+  box-shadow:0 1px 0 rgba(31,90,45,.6), inset 0 0 0 1px rgba(255,255,255,.08), 0 4px 8px rgba(31,41,51,.10);
+}
+.tile.back::after{
+  content:"雀";color:rgba(255,255,255,.18);font-size:60%;
+  font-family:"STKaiti","KaiTi",serif;
+}
+
+/* 段位徽章（小） */
+.rank-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:var(--r-pill);
+  background:rgba(43,122,61,.10);
+  color:var(--brand-jade);
+  font-size:10px;font-weight:600;letter-spacing:.06em;
+}
+.rank-pill.cinnabar{background:rgba(196,56,46,.10);color:var(--cinnabar);}
+
+/* 头像 */
+.avatar{
+  border-radius:50%;
+  background:linear-gradient(135deg,#E8DFCE,#D8CFB8);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);font-weight:600;
+  border:1.5px solid #fff;box-shadow:var(--shadow-1);
+  position:relative;flex-shrink:0;
+}
+
+/* 水印 */
+.skill-watermark{
+  position:absolute;bottom:8px;right:14px;
+  font-size:9px;color:rgba(31,41,51,.18);
+  font-family:"SF Mono",monospace;letter-spacing:.18em;
+  pointer-events:none;
+}
+.meta-note{
+  position:absolute;top:-32px;left:0;
+  font-family:"SF Mono",monospace;font-size:10px;color:rgba(255,255,255,.5);
+  letter-spacing:.05em;
+}

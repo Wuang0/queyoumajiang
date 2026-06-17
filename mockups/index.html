@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>雀友麻将 · 设计评审 · v0.2</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:#1a1a1a;color:#fff;
+    min-height:100vh;
+  }
+
+  .nav{
+    position:sticky;top:0;left:0;right:0;
+    background:rgba(20,20,20,.92);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    padding:14px 32px;display:flex;align-items:center;gap:14px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    z-index:100;flex-wrap:wrap;
+  }
+  .nav-brand{
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:18px;font-weight:600;color:#5BA56A;
+    letter-spacing:.18em;margin-right:14px;
+  }
+  .nav-meta{
+    font-family:"SF Mono",monospace;font-size:11px;
+    color:rgba(255,255,255,.4);letter-spacing:.08em;
+    margin-right:auto;
+  }
+  .nav-tab{
+    padding:6px 12px;border-radius:8px;
+    background:rgba(255,255,255,.06);
+    color:rgba(255,255,255,.7);
+    font-size:12px;letter-spacing:.06em;
+    cursor:pointer;transition:all .12s;
+    user-select:none;
+  }
+  .nav-tab:hover{background:rgba(91,165,106,.15);color:#5BA56A;}
+  .nav-tab.active{background:#2B7A3D;color:#fff;}
+
+  .container{
+    max-width:1100px;margin:0 auto;
+    padding:32px;
+  }
+
+  .screen-section{display:none;}
+  .screen-section.active{display:block;}
+
+  .screen-header{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    margin-bottom:18px;flex-wrap:wrap;gap:8px;
+  }
+  .screen-title{
+    font-size:22px;font-weight:600;letter-spacing:.06em;
+  }
+  .screen-num{
+    font-family:"SF Mono",monospace;font-size:12px;
+    color:rgba(255,255,255,.4);letter-spacing:.08em;
+  }
+  .screen-desc{
+    color:rgba(255,255,255,.55);font-size:13px;line-height:1.7;
+    max-width:780px;margin-bottom:14px;
+  }
+  .screen-key{
+    display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;
+  }
+  .key-pill{
+    padding:3px 10px;border-radius:999px;
+    background:rgba(91,165,106,.12);color:#5BA56A;
+    font-size:10px;letter-spacing:.04em;
+  }
+  .key-pill.cinnabar{background:rgba(216,92,82,.12);color:#FFB5AE;}
+  .key-pill.warning{background:rgba(217,136,59,.12);color:#FFCB85;}
+
+  .iframe-wrap{
+    border-radius:24px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    background:#0a0a0a;
+    aspect-ratio: 900 / 500;
+  }
+  .iframe-wrap.tall{aspect-ratio: 900 / 1000;}
+  .iframe-wrap iframe{
+    width:100%;height:100%;border:0;display:block;
+  }
+
+  .footer{
+    text-align:center;padding:36px 24px;
+    color:rgba(255,255,255,.3);font-size:11px;
+    letter-spacing:.18em;
+    font-family:"STKaiti","KaiTi",serif;
+  }
+
+  /* 概览模式 */
+  .overview-grid{
+    display:grid;grid-template-columns:1fr;gap:36px;
+  }
+  .overview-card{display:flex;flex-direction:column;gap:14px;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-brand">雀 友 麻 将</span>
+  <span class="nav-meta">v0.2 mockup · 横屏 · 现代东方茶馆</span>
+  <span class="nav-tab active" data-target="overview">概览</span>
+  <span class="nav-tab" data-target="01">大厅</span>
+  <span class="nav-tab" data-target="02">房间</span>
+  <span class="nav-tab" data-target="03">对局</span>
+  <span class="nav-tab" data-target="04">结算</span>
+  <span class="nav-tab" data-target="05">战绩</span>
+  <span class="nav-tab" data-target="06">好友</span>
+  <span class="nav-tab" data-target="07">我的</span>
+  <span class="nav-tab" data-target="08">登录</span>
+  <span class="nav-tab" data-target="09">异常态</span>
+</div>
+
+<div class="container">
+
+  <!-- 概览 -->
+  <div class="screen-section active" data-id="overview">
+    <div class="screen-header">
+      <div>
+        <div class="screen-title">设计稿全览 · 9 屏</div>
+        <div class="screen-num">QUEYOU · v0.2 · landscape</div>
+      </div>
+    </div>
+    <div class="screen-desc">
+      微信小程序 · 全程横屏 · 襄阳红中癞子规则 · 仅好友局段位 · TRTC 自动开麦 + 三态切换 · 现代东方茶馆视觉。
+      点击导航或下方任意一屏进入查看详情。
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="screen-num">01 · 大厅</div>
+        <div class="iframe-wrap"><iframe src="01-hall.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">02 · 房间页（等待中 3/4）</div>
+        <div class="iframe-wrap"><iframe src="02-room.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">03 · 对局页（襄阳红中癞子 · 3/8 局）</div>
+        <div class="iframe-wrap"><iframe src="03-game.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">04 · 终局结算</div>
+        <div class="iframe-wrap"><iframe src="04-result.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">05 · 战绩</div>
+        <div class="iframe-wrap"><iframe src="05-stats.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">06 · 好友 PK</div>
+        <div class="iframe-wrap"><iframe src="06-friends.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">07 · 我的</div>
+        <div class="iframe-wrap"><iframe src="07-me.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">08 · 登录</div>
+        <div class="iframe-wrap"><iframe src="08-login.html" loading="lazy"></iframe></div>
+      </div>
+      <div class="overview-card">
+        <div class="screen-num">09 · 异常态合集（4 种场景并排）</div>
+        <div class="iframe-wrap tall"><iframe src="09-errors.html" loading="lazy"></iframe></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 单屏 -->
+  <div class="screen-section" data-id="01">
+    <div class="screen-header">
+      <div><div class="screen-title">大 厅</div><div class="screen-num">01 · pages/hall/index</div></div>
+    </div>
+    <div class="screen-desc">大牌桌式 hero · 中央双 CTA（创建 / 加入）· 装饰牌散落 · 底部最近对局横滚 · TabBar 居左（横屏）</div>
+    <div class="screen-key">
+      <span class="key-pill">米麻底纹</span><span class="key-pill">翠竹绿主 CTA</span>
+      <span class="key-pill cinnabar">朱黑双色牌面</span><span class="key-pill">"雀"楷体 logo</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="01-hall.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="02">
+    <div class="screen-header">
+      <div><div class="screen-title">房 间 页（等 待 中）</div><div class="screen-num">02 · packageGame/room</div></div>
+    </div>
+    <div class="screen-desc">三栏布局：左侧规则+邀请 · 中央 4 座圆桌 · 右侧玩家列表+准备 · 底部脉动黄条提示等待状态</div>
+    <div class="screen-key">
+      <span class="key-pill">6 位房号 + 等宽</span><span class="key-pill">微信卡片邀请</span>
+      <span class="key-pill warning">虚位以待</span><span class="key-pill">房主候补机制</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="02-room.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="03">
+    <div class="screen-header">
+      <div><div class="screen-title">对 局 页（襄 阳 红 中 癞 子）</div><div class="screen-num">03 · packageGame/game</div></div>
+    </div>
+    <div class="screen-desc">深绿米麻桌面 · 4 家围坐 · 红中作癞子朱砂高亮 + 光晕呼吸 · 听牌提示 · 操作栏 6 按钮 · 麦克风长按切换三态</div>
+    <div class="screen-key">
+      <span class="key-pill cinnabar">红中癞子高亮</span><span class="key-pill">语音呼吸光圈</span>
+      <span class="key-pill warning">15s 出牌倒计时</span><span class="key-pill cinnabar">胡牌脉动</span>
+      <span class="key-pill">自由麦/PTT/闭麦</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="03-game.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="04">
+    <div class="screen-header">
+      <div><div class="screen-title">终 局 结 算</div><div class="screen-num">04 · packageGame/result</div></div>
+    </div>
+    <div class="screen-desc">左侧冠军卡（榜首 + 关键统计 + 再来一局）· 右侧 2-3-4 名排名 + 本局战况 + 最大胡牌</div>
+    <div class="screen-key">
+      <span class="key-pill cinnabar">榜首朱砂强调</span><span class="key-pill">关键时刻摘要</span>
+      <span class="key-pill">再来一局保留房</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="04-result.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="05">
+    <div class="screen-header">
+      <div><div class="screen-title">战 绩</div><div class="screen-num">05 · pages/stats</div></div>
+    </div>
+    <div class="screen-desc">左侧段位卡（徽章 + 进度条）· 右侧 14 天趋势折线 + 本周数据条 + 历史对局列表</div>
+    <div class="screen-key">
+      <span class="key-pill">8 段位 · 仅升不降</span><span class="key-pill">SVG 折线图</span>
+      <span class="key-pill cinnabar">关键点朱砂</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="05-stats.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="06">
+    <div class="screen-header">
+      <div><div class="screen-title">好 友 PK</div><div class="screen-num">06 · pages/friends</div></div>
+    </div>
+    <div class="screen-desc">左侧好友列表（搜索 + 在线/对局中状态点）· 右侧选中好友 PK 详情 + 邀请按钮</div>
+    <div class="screen-key">
+      <span class="key-pill">在线状态点</span><span class="key-pill warning">对局中</span>
+      <span class="key-pill">VS 楷体</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="06-friends.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="07">
+    <div class="screen-header">
+      <div><div class="screen-title">我 的</div><div class="screen-num">07 · pages/me</div></div>
+    </div>
+    <div class="screen-desc">左侧用户卡（头像/段位/累计/快捷数据）· 右侧分组设置（游戏/隐私/帮助）· 默认麦克风状态可设置</div>
+    <div class="screen-key">
+      <span class="key-pill">无金币系统</span><span class="key-pill">段位徽章 ·"叁"</span>
+      <span class="key-pill warning">麦克风默认态</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="07-me.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="08">
+    <div class="screen-header">
+      <div><div class="screen-title">登 录</div><div class="screen-num">08 · pages/login</div></div>
+    </div>
+    <div class="screen-desc">居中 logo + 微信一键登录（不在此处申请麦克风权限）· 隐私政策 · 标语</div>
+    <div class="screen-key">
+      <span class="key-pill">微信原生绿 #07C160</span><span class="key-pill">麦权延后申请</span>
+    </div>
+    <div class="iframe-wrap"><iframe src="08-login.html"></iframe></div>
+  </div>
+
+  <div class="screen-section" data-id="09">
+    <div class="screen-header">
+      <div><div class="screen-title">异 常 态 合 集</div><div class="screen-num">09 · packageError/* · 4 种关键场景</div></div>
+    </div>
+    <div class="screen-desc">
+      重连中（保留座位 30s 倒计时）· 重连失败（60s 内可重进）· 房间解散（房主退出）· TRTC 失败（顶部 toast，游戏不阻塞）
+    </div>
+    <div class="screen-key">
+      <span class="key-pill warning">语音失败不阻塞</span><span class="key-pill cinnabar">朱砂倒计时</span>
+      <span class="key-pill">客户端永远 retry</span><span class="key-pill">状态在后端</span>
+    </div>
+    <div class="iframe-wrap tall"><iframe src="09-errors.html"></iframe></div>
+  </div>
+
+</div>
+
+<div class="footer">QUEYOU · 群 里 一 张 卡 片 · 三 十 秒 开 局</div>
+
+<script>
+  const tabs = document.querySelectorAll('.nav-tab');
+  const sections = document.querySelectorAll('.screen-section');
+  tabs.forEach(t => {
+    t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      t.classList.add('active');
+      document.querySelector(`[data-id="${t.dataset.target}"]`).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>

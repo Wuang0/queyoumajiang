@@ -1,0 +1,53 @@
+{
+  "name": "queyoumajiang",
+  "version": "0.1.0",
+  "description": "雀友麻将 - 朋友局缺一门红中癞子 H5 网页版",
+  "private": true,
+  "scripts": {
+    "dev:backend": "pnpm --filter @queyou/backend start:dev",
+    "dev:frontend": "pnpm --filter @queyou/frontend dev:h5",
+    "dev:weapp": "pnpm --filter @queyou/frontend dev:weapp",
+    "build:backend": "pnpm --filter @queyou/backend build",
+    "build:frontend": "pnpm --filter @queyou/frontend build:h5",
+    "build:protocol": "pnpm --filter @queyou/protocol build",
+    "build": "pnpm build:protocol && pnpm build:backend && pnpm build:frontend",
+    "test:backend": "pnpm --filter @queyou/backend test",
+    "test:protocol": "pnpm --filter @queyou/protocol test",
+    "test": "pnpm test:protocol && pnpm test:backend",
+    "lint:backend": "pnpm --filter @queyou/backend lint",
+    "lint:frontend": "pnpm --filter @queyou/frontend lint",
+    "lint": "pnpm lint:backend && pnpm lint:frontend",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md}\""
+  },
+  "keywords": [
+    "mahjong",
+    "wechat",
+    "miniprogram",
+    "nestjs",
+    "taro",
+    "react"
+  ],
+  "author": "Queyou Team",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.4",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11"
+  }
+}
